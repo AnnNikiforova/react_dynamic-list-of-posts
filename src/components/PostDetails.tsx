@@ -27,7 +27,11 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
 
       setComments(fetchedComments);
     } catch (err) {
-      setError('Something went wrong');
+      if (err instanceof Error) {
+        setError(`Something went wrong: ${err.message}`);
+      } else {
+        setError('Something went wrong: An unknown error occurred');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -42,9 +46,13 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
 
     setComments(curr => curr.filter(comment => comment.id !== id));
 
-    deleteComment(id).catch(() => {
+    deleteComment(id).catch(err => {
       setComments(previousComments);
-      setError('Failed to delete the comment');
+      if (err instanceof Error) {
+        setError(`Failed to delete the comment: ${err.message}`);
+      } else {
+        setError('Failed to delete the comment: An unknown error occurred');
+      }
     });
   };
 
@@ -66,7 +74,7 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
             </div>
           )}
 
-          {!isLoading && !comments.length && !error && (
+          {!isLoading && comments.length === 0 && !error && (
             <p className="title is-4" data-cy="NoCommentsMessage">
               No comments yet
             </p>

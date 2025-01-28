@@ -55,6 +55,11 @@ export const NewCommentForm: React.FC<Props> = ({
     if (!trimmedEmail) {
       hasValidationErrors = true;
       setEmailError('Email is required');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      hasValidationErrors = true;
+      setEmailError('Please enter a valid email address');
+    } else {
+      setEmailError('');
     }
 
     if (!trimmedText) {

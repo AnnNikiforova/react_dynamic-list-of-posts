@@ -46,7 +46,11 @@ export const App = () => {
 
       setPosts(fetchedPosts);
     } catch (err) {
-      setError('Failed to load posts');
+      if (err instanceof Error) {
+        setError(`Failed to load posts: ${err.message}`);
+      } else {
+        setError('Failed to load posts: An unknown error occurred');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -106,7 +110,10 @@ export const App = () => {
                       className="notification is-warning"
                       data-cy="NoPostsYet"
                     >
-                      No posts yet
+                      No posts yet for
+                      {selectedUser.name
+                        ? selectedUser.name
+                        : 'the selected user'}
                     </div>
                   )
                 )}
